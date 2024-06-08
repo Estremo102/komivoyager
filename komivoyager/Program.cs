@@ -78,7 +78,7 @@ class Program
         //////string[] a = solutions[0].Path.Split(';');
 
         int solutionNumber = 0;
-        //while (true)
+        while (true)
         {
             solutionNumber++;
             //choose best 10% and create children
@@ -97,25 +97,23 @@ class Program
             solutions = newGeneration;
             Array.Sort(solutions);
             //save best solution
-            //if (solutionNumber % 500 == 0)
+            if (solutionNumber % 500 == 1)
             {
                 using (StreamWriter reader = new StreamWriter($"solutions/solution{solutionNumber}.txt"))
                 {
                     reader.WriteLine(solutions[0].ToString() + "\n");
-                    reader.WriteLine(solutions[0].IncrementToString());
                     Console.WriteLine(solutions[0].Cost);
                 }
             }
-
-            string[] a = solutions[0].Path.Split(';');
-            int[] b = new int[a.Length];
-            for (int i = 0; i < b.Length; i++)
-                b[i] = int.Parse(a[i]);
-            Array.Sort(b);
-            Console.WriteLine(b.Length);
-            int aaa = 0;
-            foreach (int i in b)
-                if (aaa == i) Console.WriteLine(aaa);
+            //string[] a = solutions[0].Path.Split(';');
+            //int[] b = new int[a.Length];
+            //for (int i = 0; i < b.Length; i++)
+            //    b[i] = int.Parse(a[i]);
+            //Array.Sort(b);
+            //Console.WriteLine(b.Length);
+            //int aaa = 0;
+            //foreach (int i in b)
+            //    if (aaa == i) Console.WriteLine(aaa);
         }
     }
 

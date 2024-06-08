@@ -34,17 +34,23 @@ public class Solution : IComparable<Solution>
         }
         Cost += data[travel[travel.Length - 1], 0];
         Map[99] = travel[travel.Length - 1];
+        for (int i = 0; i < Map.Count-1; i++)
+            if (Map[i] == 0)
+            {
+                Console.WriteLine(i);
+                throw new Exception();
+            }
     }
 
     public override string ToString() => $"Cost: {Cost}\nPath: {Path}";
-    public string IncrementToString()
-    {
-        var a = Path.Split(';');
-        var b = "";
-        foreach (var i in a)
-            b += (int.Parse(i) + 1).ToString() + ";";
-        return b;
-    }
+    //public string IncrementToString()
+    //{
+    //    var a = Path.Split(';');
+    //    var b = "";
+    //    foreach (var i in a)
+    //        b += (int.Parse(i) + 1).ToString() + ";";
+    //    return b;
+    //}
     public int CompareTo(Solution? other)
     {
         if (other == null) return 1;
