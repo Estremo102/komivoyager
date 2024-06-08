@@ -33,11 +33,14 @@ class Program
                 travelOrderPopulation[i][k] = tmp;
             }
         }
+        Solution[] solutions = new Solution[100];
+        for(int i = 0; i < solutions.Length; i++)
+            solutions[i] = new Solution(travelOrderPopulation[i], data, i);
 
         //Debug
         for(int i = 0; i < 100; i++)
         {
-            Console.WriteLine(CostOfTravel(travelOrderPopulation[i], data, i));
+            Console.WriteLine(new Solution(travelOrderPopulation[i], data, i));
         }
     }
 
@@ -48,4 +51,22 @@ class Program
             cost += data[index,i];
         return cost;
     }
+}
+
+public class Solution
+{
+    public int Cost { get; set; }
+    public string Path { get; set; }
+
+    public Solution(int[] travel, int[,] data, int index)
+    {
+        Path = "Path: ";
+        foreach (int i in travel)
+        {
+            Cost += data[index,i];
+            Path += $"{data[index, i]};";
+        }
+    }
+
+    public override string ToString() => $"Cost: {Cost}\n{Path}";
 }
