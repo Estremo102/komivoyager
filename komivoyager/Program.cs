@@ -36,12 +36,9 @@ class Program
         Solution[] solutions = new Solution[100];
         for(int i = 0; i < solutions.Length; i++)
             solutions[i] = new Solution(travelOrderPopulation[i], data, i);
-
-        //Debug
-        for(int i = 0; i < 100; i++)
-        {
-            Console.WriteLine(new Solution(travelOrderPopulation[i], data, i));
-        }
+        Array.Sort(solutions);
+        foreach (Solution solution in solutions)
+            Console.WriteLine(solution);
     }
 
     public static int CostOfTravel(int[] travel, int[,] data, int index)
@@ -53,7 +50,7 @@ class Program
     }
 }
 
-public class Solution
+public class Solution : IComparable<Solution>
 {
     public int Cost { get; set; }
     public string Path { get; set; }
@@ -69,4 +66,11 @@ public class Solution
     }
 
     public override string ToString() => $"Cost: {Cost}\n{Path}";
+
+    public int CompareTo(Solution? other)
+    {
+        if(other.Cost > Cost) return -1 ;
+        if (other.Cost < Cost) return 1;
+        return 0 ;
+    }
 }
