@@ -8,7 +8,7 @@ class Program
     {
         Random random = new Random();
         //config
-        int countOfPopulation = 1000;
+        int countOfPopulation = 5000;
         int mutationPercent = 3; //in %
         //Read data from csv
         int[,] data = new int[100, 100];
@@ -31,15 +31,52 @@ class Program
             for (int j = 0; j < travelOrderPopulation[i].Length - 1; j++)
             {
                 int k = random.Next(99);
+                if (k == j)
+                {
+                    if (j == 0)
+                    {
+                        k++;
+                    }
+                    else k--;
+                }
                 int tmp = travelOrderPopulation[i][j];
                 travelOrderPopulation[i][j] = travelOrderPopulation[i][k];
                 travelOrderPopulation[i][k] = tmp;
+                bool noDouble = false;
+                while (!noDouble)
+                {
+                    for (int l = 1; l < travelOrderPopulation[i].Length - 1; l++)
+                    {
+                        if (travelOrderPopulation[i][l] == l)
+                        {
+                            var r = random.Next(99);
+                            var a = travelOrderPopulation[i][l];
+                            travelOrderPopulation[i][l] = travelOrderPopulation[i][r];
+                            travelOrderPopulation[i][r] = a;
+                        }
+                    }
+                    noDouble = true;
+                    for (int l = 1; l < travelOrderPopulation[i].Length - 1; l++)
+                    {
+                        if (travelOrderPopulation[i][l] == l)
+                            noDouble = false;
+                    }
+
+                }
+                for (int l = 1; l < travelOrderPopulation[i].Length - 1; l++)
+                {
+                    if (travelOrderPopulation[i][l] == l)
+                        throw new Exception();
+                }
             }
         }
         Solution[] solutions = new Solution[countOfPopulation];
         for (int i = 0; i < solutions.Length; i++)
             solutions[i] = new Solution(travelOrderPopulation[i], data);
         Array.Sort(solutions);
+        //////Console.WriteLine(solutions[0].Cost);
+        //////string[] a = solutions[0].Path.Split(';');
+
         int solutionNumber = 0;
         //while (true)
         {
@@ -53,16 +90,31 @@ class Program
             }
             for (int i = tenPercent; i < newGeneration.Length; i++)
             {
-                newGeneration[i] = newGeneration[newGeneration.Length / i].CreateChild(random.Next(1,10));
+                if (i % 10 == 0) mutationPercent = 100;
+                else mutationPercent = 5;
+                newGeneration[i] = newGeneration[newGeneration.Length / i].CreateChild(random.Next(1, mutationPercent));
             }
             solutions = newGeneration;
             Array.Sort(solutions);
             //save best solution
-            using (StreamWriter reader = new StreamWriter($"solutions/solution{solutionNumber}.txt"))
+            //if (solutionNumber % 500 == 0)
             {
-                reader.WriteLine(solutions[0].ToString() + "\n");
-                reader.WriteLine(solutions[0].IncrementToString());
+                using (StreamWriter reader = new StreamWriter($"solutions/solution{solutionNumber}.txt"))
+                {
+                    reader.WriteLine(solutions[0].ToString() + "\n");
+                    reader.WriteLine(solutions[0].IncrementToString());
+                    Console.WriteLine(solutions[0].Cost);
+                }
             }
+
+            string[] a = solutions[0].Path.Split(';');
+            int[] b = new int[a.Length];
+            for (int i = 0; i < b.Length; i++)
+                b[i] = int.Parse(a[i]);
+            Array.Sort(b);
+            Console.WriteLine(b.Length);
+            foreach (int i in b)
+                Console.Write(i + " ");
         }
     }
 
