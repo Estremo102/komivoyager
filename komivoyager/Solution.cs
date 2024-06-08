@@ -19,7 +19,14 @@
     }
 
     public override string ToString() => $"Cost: {Cost}\nPath: {Path}";
-
+    public string IncrementToString()
+    {
+        var a = Path.Split(';') ;
+        var b = "";
+        foreach (var i in a)
+            b += (int.Parse(i) + 1).ToString() + ";";
+        return b ;
+    }
     public int CompareTo(Solution? other)
     {
         if (other.Cost > Cost) return -1;

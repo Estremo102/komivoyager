@@ -6,6 +6,7 @@ class Program
 {
     static void Main()
     {
+        Random random = new Random();
         //config
         int countOfPopulation = 1000;
         int mutationPercent = 3; //in %
@@ -26,9 +27,8 @@ class Program
         {
             travelOrderPopulation[i] = new int[100];
             for (int j = 0; j < travelOrderPopulation[i].Length; j++)
-                travelOrderPopulation[i][j] = 99-j;
-            Random random = new Random();
-            for (int j = 0; j < travelOrderPopulation[i].Length-1; j++)
+                travelOrderPopulation[i][j] = 99 - j;
+            for (int j = 0; j < travelOrderPopulation[i].Length - 1; j++)
             {
                 int k = random.Next(99);
                 int tmp = travelOrderPopulation[i][j];
@@ -40,21 +40,31 @@ class Program
         for (int i = 0; i < solutions.Length; i++)
             solutions[i] = new Solution(travelOrderPopulation[i], data);
         Array.Sort(solutions);
-        //choose best 10% and create children
-        int tenPercent = countOfPopulation / 10;
-        Solution[] newGeneration = new Solution[countOfPopulation];
-        for (int i = 0; i < tenPercent; i++)
+        int solutionNumber = 0;
+        //while (true)
         {
-            newGeneration[i] = solutions[i];
+            solutionNumber++;
+            //choose best 10% and create children
+            int tenPercent = countOfPopulation / 10;
+            Solution[] newGeneration = new Solution[countOfPopulation];
+            for (int i = 0; i < tenPercent; i++)
+            {
+                newGeneration[i] = solutions[i];
+            }
+            for (int i = tenPercent; i < newGeneration.Length; i++)
+            {
+                newGeneration[i] = newGeneration[newGeneration.Length / i].CreateChild(random.Next(1,10));
+            }
+            solutions = newGeneration;
+            Array.Sort(solutions);
+            //save best solution
+            using (StreamWriter reader = new StreamWriter($"solutions/solution{solutionNumber}.txt"))
+            {
+                reader.WriteLine(solutions[0].ToString() + "\n");
+                reader.WriteLine(solutions[0].IncrementToString());
+            }
         }
-        for(int i = tenPercent; i < newGeneration.Length; i++)
-        {
-            newGeneration[i] = newGeneration[newGeneration.Length/i].CreateChild(mutationPercent);
-        }
-        solutions = newGeneration;
-        foreach (Solution solution in solutions)
-            Console.WriteLine(solution);
-        }
+    }
 
     public static int CostOfTravel(int[] travel, int[,] data, int index)
     {
