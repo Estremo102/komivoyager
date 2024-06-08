@@ -3,47 +3,37 @@
 public class Solution : IComparable<Solution>
 {
     public int Cost { get; set; }
-    public string Path { get; set; }
+    public string Path
+    {
+        get
+        {
+            string Path = "";
+            for(int i = 0; i < 99; i++)
+            {
+                Path += $"{Map[i]};";
+            }
+            Path += $"{Map[99]}";
+            return Path;
+        }
+    }
+    public Dictionary<int, int> Map { get; set; }
+
     private int[,] data;
 
     public Solution(int[] travel, int[,] data)
     {
+        Map = new Dictionary<int, int>();
         Random random = new Random();
         this.data = data;
-        Path = $"{travel[0]};";
+        Map[0] = travel[0];
         Cost = data[0, travel[0]];
-        for (int i = 0; i < travel.Length - 2; i++)
+        for (int i = 1; i < travel.Length - 1; i++)
         {
-            Path += $"{travel[i]};";
+            Map[i] = travel[i];
             Cost += data[travel[i], travel[i + 1]];
         }
         Cost += data[travel[travel.Length - 1], 0];
-        Path += $"{travel[travel.Length - 1]}";
-
-        string[] tmpPath = Path.Split(';');
-        int[] intPath = new int[tmpPath.Length];
-        for (int i = 0; i < intPath.Length; i++)
-        {
-            intPath[i] = int.Parse(tmpPath[i]);
-        }
-        for (int i = 1; i < intPath.Length - 1; i++)
-        {
-            if (intPath[i] == i)
-            {
-                int j = random.Next(99);
-                var a = intPath[i];
-                intPath[i] = intPath[j];
-                intPath[j] = a;
-            }
-        }
-        for (int i = 0; i < intPath.Length - 1; i++)
-        {
-            if (intPath[i] == i)
-            {
-                var tmp = new Solution(intPath, data);
-                Path = tmp.Path;
-            }
-        }
+        Map[99] = travel[travel.Length - 1];
     }
 
     public override string ToString() => $"Cost: {Cost}\nPath: {Path}";

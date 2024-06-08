@@ -113,8 +113,9 @@ class Program
                 b[i] = int.Parse(a[i]);
             Array.Sort(b);
             Console.WriteLine(b.Length);
+            int aaa = 0;
             foreach (int i in b)
-                Console.Write(i + " ");
+                if (aaa == i) Console.WriteLine(aaa);
         }
     }
 
