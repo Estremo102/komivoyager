@@ -33,5 +33,19 @@ class Program
                 travelOrderPopulation[i][k] = tmp;
             }
         }
+
+        //Debug
+        for(int i = 0; i < 100; i++)
+        {
+            Console.WriteLine(CostOfTravel(travelOrderPopulation[i], data, i));
+        }
+    }
+
+    public static int CostOfTravel(int[] travel, int[,] data, int index)
+    {
+        int cost = 0;
+        foreach(int i in travel)
+            cost += data[index,i];
+        return cost;
     }
 }
