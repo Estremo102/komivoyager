@@ -3,13 +3,13 @@
     public int Cost { get; set; }
     public string Path { get; set; }
 
-    public Solution(int[] travel, int[,] data, int index)
+    public Solution(int[] travel, int[,] data)
     {
         Path = "Path: ";
-        foreach (int i in travel)
+        for(int i = 0; i < travel.Length-1; i++)
         {
-            Cost += data[index, i];
-            Path += $"{data[index, i]};";
+            Path += $"{travel[i]};";
+            Cost+= data[travel[i],travel[i+1]];
         }
     }
 
@@ -17,8 +17,8 @@
 
     public int CompareTo(Solution? other)
     {
-        if (other.Cost > Cost) return -1;
+        if(other.Cost > Cost) return -1 ;
         if (other.Cost < Cost) return 1;
-        return 0;
+        return 0 ;
     }
 }
