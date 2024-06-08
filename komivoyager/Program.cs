@@ -6,6 +6,7 @@ class Program
 {
     static void Main()
     {
+        //Read data from csv
         int[,] data = new int[100, 100];
         using (var reader = new StreamReader("dane.csv"))
         {
@@ -16,6 +17,21 @@ class Program
                     data[i, j] = int.Parse(line[j]);
             }
         }
-
+        //Initialize Random Population
+        int[][] travelOrderPopulation = new int[100][];
+        for (int i = 0;i < travelOrderPopulation.Length; i++)
+        {
+            travelOrderPopulation[i] = new int[100];
+            for (int j = 0; j < travelOrderPopulation[i].Length; j++)
+                travelOrderPopulation[i][j] = j;
+            Random random = new Random();
+            for(int j = 0;j < travelOrderPopulation[i].Length; j++)
+            {
+                int k = random.Next(100);
+                int tmp = travelOrderPopulation[i][j];
+                travelOrderPopulation[i][j] = travelOrderPopulation[i][k];
+                travelOrderPopulation[i][k] = tmp;
+            }
+        }
     }
 }
