@@ -1,6 +1,4 @@
-﻿using CsvHelper;
-using System;
-using System.Globalization;
+﻿using System;
 
 class Program
 {
@@ -9,7 +7,10 @@ class Program
         Random random = new Random();
         //config
         int countOfPopulation = 5000;
-        int mutationPercent = 3; //in %
+        int mutationPercent;
+        int normalMutation = 3;
+        int extremeMutation = 100;
+        int solutionSavingFrequency = 500;
         //Read data from csv
         int[,] data = new int[100, 100];
         using (var reader = new StreamReader("dane.csv"))
@@ -33,10 +34,7 @@ class Program
                 int k = random.Next(99);
                 if (k == j)
                 {
-                    if (j == 0)
-                    {
-                        k++;
-                    }
+                    if (j == 0) k++;
                     else k--;
                 }
                 int tmp = travelOrderPopulation[i][j];
@@ -63,19 +61,12 @@ class Program
                     }
 
                 }
-                for (int l = 1; l < travelOrderPopulation[i].Length - 1; l++)
-                {
-                    if (travelOrderPopulation[i][l] == l)
-                        throw new Exception();
-                }
             }
         }
         Solution[] solutions = new Solution[countOfPopulation];
         for (int i = 0; i < solutions.Length; i++)
             solutions[i] = new Solution(travelOrderPopulation[i], data);
         Array.Sort(solutions);
-        //////Console.WriteLine(solutions[0].Cost);
-        //////string[] a = solutions[0].Path.Split(';');
 
         int solutionNumber = 0;
         while (true)
@@ -90,14 +81,14 @@ class Program
             }
             for (int i = tenPercent; i < newGeneration.Length; i++)
             {
-                if (i % 10 == 0) mutationPercent = 100;
-                else mutationPercent = 5;
+                if (i % 10 == 0) mutationPercent = extremeMutation;
+                else mutationPercent = normalMutation;
                 newGeneration[i] = newGeneration[newGeneration.Length / i].CreateChild(random.Next(1, mutationPercent));
             }
             solutions = newGeneration;
             Array.Sort(solutions);
             //save best solution
-            if (solutionNumber % 500 == 1)
+            if (solutionNumber % solutionSavingFrequency == 1)
             {
                 using (StreamWriter reader = new StreamWriter($"solutions/solution{solutionNumber}.txt"))
                 {
@@ -105,24 +96,7 @@ class Program
                     Console.WriteLine(solutions[0].Cost);
                 }
             }
-            //string[] a = solutions[0].Path.Split(';');
-            //int[] b = new int[a.Length];
-            //for (int i = 0; i < b.Length; i++)
-            //    b[i] = int.Parse(a[i]);
-            //Array.Sort(b);
-            //Console.WriteLine(b.Length);
-            //int aaa = 0;
-            //foreach (int i in b)
-            //    if (aaa == i) Console.WriteLine(aaa);
         }
-    }
-
-    public static int CostOfTravel(int[] travel, int[,] data, int index)
-    {
-        int cost = 0;
-        foreach (int i in travel)
-            cost += data[index, i];
-        return cost;
     }
 }
 
