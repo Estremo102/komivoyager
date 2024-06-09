@@ -8,7 +8,7 @@ class Program
         //config
         int countOfPopulation = 5000;
         int mutationPercent;
-        int normalMutation = 3;
+        int normalMutation = 5;
         int extremeMutation = 100;
         int solutionSavingFrequency = 500;
         //Read data from csv
